@@ -1,11 +1,11 @@
 from models import Cliente, Resposta
-# import uvicorn
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import joblib
 
-from backend.utils.utils import jsonc
+from utils.utils import jsonc
 from models import Resposta
 
 # Carrega o Model
@@ -31,8 +31,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-
 # Função que calcula o núcleo do usuário
 def calc_nucleo(cliente: Cliente) -> Resposta:
     c = [cliente.balance, cliente.purchases, cliente.cash_advance, cliente.credit_limit, cliente.payments]
@@ -57,5 +55,5 @@ async def avaliacao(cliente: Cliente):
     print(f"Resultado: {r.resposta}")
     return jsonc(r)
 
-#if __name__ == "__main__":
-#    uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)

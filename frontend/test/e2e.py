@@ -1,4 +1,5 @@
 import platform
+import os
 
 def config_selenium():
     from selenium import webdriver
@@ -10,12 +11,12 @@ def config_selenium():
 
     try:
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")  
+        #chrome_options.add_argument("--headless")  
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
 
         firefox_options = webdriver.FirefoxOptions()
-        firefox_options.add_argument("--headless") 
+        #firefox_options.add_argument("--headless") 
     except Exception as e: 
         print("error: on configurations of selenium:", e)
 
@@ -43,12 +44,23 @@ def TestForm(driver):
     LIMETE_DE_CREDITO_INPUT = '//*[@id="credit_limit"]'
     PAGAMENTOS_INPUT = '//*[@id="payments"]'
 
+    ENVIAR_ANALISE_BUTTON = '/html/body/div/form/button'
     try:    
-        driver.get(f"file://frontend/app/index.html")
+        index_path = os.path.abspath("frontend/app/index.html")
+        driver.get(f"file://{index_path}")
+
+        driver.find_element("xpath", NOME_CLIENT_INPUT).send_keys("Gabriel")
+        driver.find_element("xpath", LIMETE_RESTANTE_INPUT).send_keys("1000")
+        driver.find_element("xpath", QUANTIDADE_EM_COMPRAS_INPUT).send_keys("5")
+        driver.find_element("xpath", SAQUES_INPUT).send_keys("200")
+        driver.find_element("xpath", LIMETE_DE_CREDITO_INPUT).send_keys("1500")
+        driver.find_element("xpath", PAGAMENTOS_INPUT).send_keys("500")
+
+        driver.find_element("xpath", ENVIAR_ANALISE_BUTTON).click()
     except Exception as e:
         driver.quit()
         print("error on TestForm:", e)
-
+    
 def e2e():
     driver = config_selenium()
     TestForm(driver)
